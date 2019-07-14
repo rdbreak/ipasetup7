@@ -5,7 +5,7 @@
 - Python - (`yum install python`or `brew install python`)
 - [Vagrant](https://www.vagrantup.com/downloads.html) - (`brew cask install vagrant`)
 - [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (`brew cask install VirtualBox`)
-- SSHPASS `brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb`
+- SSHPASS (`brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb`)
 ### Install at once with the command below:
 `brew install ansible ; brew install python ; brew cask install vagrant ; brew cask install VirtualBox ; brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb`
 

@@ -58,7 +58,7 @@ Remember to add the IP addresses to your local host file if you want to connect 
 Username - vagrant
 Password - vagrant
 - For root - use `sudo` or `sudo su`
-Access example - `ssh vagrant@192.168.55.5` or `vagrant ssh system`
+Access example - `ssh vagrant@192.168.55.5` or `vagrant ssh ipa`
 
 ### LDAP users
 - Username = dave, lisa

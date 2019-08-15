@@ -24,7 +24,7 @@ _Now you should be ready to follow the next steps and get the deployment up and 
 ## Once the above software is installed. Do the following if you're running the environment on Mac/Linux:
 1. Create a separate `~/bin` directory and `cd` to it.  (The directory doesn't have to be ~/bin, it can be anything you want.)
 2. Clone the environment repo to it with `git clone https://github.com/rdbreak/ipasetup7`
-3. Change to the `rhcsa7env` directory that is now in your `~/bin` directory.
+3. Change to the `ipasetup7` directory that is now in your `~/bin` directory.
 4. Run `vagrant up` to deploy the environment 
 
 ## Once the above software is installed. Do the following if you're running the environment on Windows:

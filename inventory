@@ -1,2 +1,2 @@
 [ipa]
-ipa.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
+ipa.example.com ansible_host=192.168.55.5 ansible_ssh_user=vagrant ansible_password=vagrant ansible_python_interpreter=/usr/bin/python

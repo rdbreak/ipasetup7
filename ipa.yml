@@ -1,8 +1,11 @@
 ---
 - hosts: ipa
   strategy: free
-  gather_facts: False
+  gather_facts: true
+  become: true
   tasks:
+  - name: Setting Hostname
+    command: hostnamectl set-hostname ipa.example.com
   - name: Fixing hosts file
     lineinfile:
       dest: /etc/hosts
@@ -21,32 +24,114 @@
   - name: Adding IPA address to hosts file
     lineinfile:
       path: /etc/hosts
-      line: 192.168.55.30 ipa.example.com ipa
+      line: 192.168.55.5 ipa.example.com ipa
       create: yes
-## Add your clients IP address below
-#  - name: Adding system1 address to hosts file
-#    lineinfile:
-#      path: /etc/hosts
-#      line: 192.168.55.6 system1.example.com system1
-#      create: yes
-  - name: Installing Environment Packages
-    command: yum install -y ipa-server ipa-server-dns vsftpd
+  - name: Adding system1 address to hosts file
+    lineinfile:
+      path: /etc/hosts
+      line: 192.168.55.6 system1.example.com system1
+      create: yes
+  - name: Adding repo address to hosts file
+    lineinfile:
+      path: /etc/hosts
+      line: 192.168.55.4 repo.example.com repo
+      create: yes
+  - name: Packages Installed.
+    yum:
+      name:
+        - ipa-server
+        - ipa-server-dns
+  - name: Configuring network
+    shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.5/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search example.com ipv4.method manual
   - name: Enabling services
     service: name={{item}} enabled=true
     with_items:
       - httpd
-      - vsftpd
       - firewalld
-      - ntpd
   - name: Starting Firewalld
     service: name=firewalld state=started
   - name: Enabling Firewall Services
     command: firewall-cmd --permanent --add-service=http --add-service=https --add-service=ntp --add-service=dns --add-service=kerberos --add-service=ldap --add-service=ldaps --add-service=ftp
-  - name: Reloading Firewall
+  - name: Reloaded Firewall. Configuring IPA server...(Est. Time - 7 minutes)
     command: firewall-cmd --reload
-  - name: Configuring network
-    shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.30/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search example.com ipv4.method manual
-  - name: Reloaded Network. Configuring IPA server...(Est. Time - 7 minutes)
-    shell: nmcli con up "System eth1"  
   - name: Finishing IPA server Configuration
-    command: sudo ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname=ipa.example.com -r EXAMPLE.COM -p 'password' -n example.com -U --forwarder 8.8.8.8
+    command: ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname=ipa.example.com -r EXAMPLE.COM -p 'password' -n example.com -U --forwarder 8.8.8.8
+  - name: Adding IPA user 'dave'
+    ipa_user:
+        name: dave
+        state: present
+        krbpasswordexpiration: 20200119235959
+        givenname: dave
+        sn: dave
+        mail:
+        - dave@example.com
+        telephonenumber:
+        - '+555123456'
+        sshpubkey:
+        password: password
+        uidnumber: 1001
+        gidnumber: 1000
+        ipa_host: ipa.example.com
+        ipa_user: admin
+        ipa_pass: password
+    
+  - name: Adding IPA user 'lisa'
+    ipa_user:
+        name: lisa
+        state: present
+        krbpasswordexpiration: 20200119235959
+        givenname: lisa
+        sn: lisa
+        mail:
+        - lisa@example.com
+        telephonenumber:
+        - '+555123456'
+        sshpubkey:
+        password: password
+        uidnumber: 1002
+        gidnumber: 1001
+        ipa_host: ipa.example.com
+        ipa_user: admin
+        ipa_pass: password   
+  - name: Setting SELinux To Permissive
+    shell: setenforce 0
+    ignore_errors: yes
+  - name: Creating Welcome Message
+    file:
+      path: /etc/profile.d/welcome.sh
+      state: touch
+      mode: 0755
+  - name: You're IPA server for RHEL 7 has been setup!
+    debug:
+      msg:
+        - 'Accessing The System:'
+        - '- IPA - 192.168.55.5'
+        - '- Username - vagrant'
+        - '- Password - vagrant'
+        - '- Access example - `ssh vagrant@192.168.55.5` or `vagrant ssh ipa`'
+        - '- Happy Studying!'
+  - name: Building Welcome Message
+    blockinfile:
+      dest: /etc/profile.d/welcome.sh
+      block: |
+         #!/bin/bash
+         #
+         echo -e '
+         #             _         _         _          
+         #           /\ \      /\ \      / /\        
+         #           \ \ \    /  \ \    / /  \       
+         #           /\ \_\  / /\ \ \  / / /\ \      
+         #          / /\/_/ / / /\ \_\/ / /\ \ \     
+         #         / / /   / / /_/ / / / /  \ \ \    
+         #        / / /   / / /__\/ / / /___/ /\ \   
+         #       / / /   / / /_____/ / /_____/ /\ \  
+         #   ___/ / /__ / / /     / /_________/\ \ \ 
+         #  /\__\/_/___/ / /     / / /_       __\ \_\
+         #  \/_________\/_/      \_\___\     /____/_/
+         '"#
+         #
+         # You are logged into `hostname` as the `whoami` user
+         # This system is running `cat /etc/redhat-release`
+         # kernel is `uname -r`
+         "
+...

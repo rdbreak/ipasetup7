@@ -8,7 +8,7 @@ _Gatekeeper will block virtualbox from installing. All you have to do is go to S
 `brew install ansible ; brew install python ; brew cask install vagrant ; brew cask install VirtualBox ; brew cask install virtualbox-extension-pack`
 ##### Alternatively, you can install everything individually below.
 - [Latest Version of Vagrant](https://www.vagrantup.com/downloads.html) - (`brew cask install vagrant`)
-    - Vagrant Plugin - `vagrant plugin install vagrant-guest_ansible`
+    - Vagrant Plugin - `vagrant plugin install vagrant-guest-ansible`
 - [Latest Version of Virtualbox](https://www.virtualbox.org/wiki/Downloads) (`brew cask install VirtualBox`)
     - Virtual Box Extension Pack (`brew cask install virtualbox-extension-pack`)
 
@@ -18,17 +18,20 @@ _NOTE - If it's been awhile since you've run yum update, do that first. Reboot i
 ##### Install all at once by Copy/Pasting the below command into your terminal as root.
 
 ```
-systemctl stop packagekit; yum install -y epel-release && yum install -y git binutils gcc make patch libgomp glibc-headers glibc-devel kernel-headers kernel-devel dkms libvirt libvirt-devel ruby-devel libxslt-devel libxml2-devel libguestfs-tools-c ; mkdir ~/Vagrant ; cd ~/Vagrant ; curl -o  vagrant_2.2.5_x86_64.rpm https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.rpm && yum install -y vagrant_2.2.5_x86_64.rpm && vagrant plugin install vagrant-guest_ansible ; vagrant plugin install vagrant-libvirt ; wget -O /etc/yum.repos.d/virtualbox.repo wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo ; yum install -y VirtualBox-6.0 && systemctl start packagekit
+systemctl stop packagekit; yum install -y epel-release && yum install -y git binutils gcc make patch libgomp glibc-headers glibc-devel kernel-headers kernel-devel dkms libvirt libvirt-devel ruby-devel libxslt-devel libxml2-devel libguestfs-tools-c ; mkdir ~/Vagrant ; cd ~/Vagrant ; curl -o  vagrant_2.2.5_x86_64.rpm https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.rpm && yum install -y vagrant_2.2.5_x86_64.rpm && vagrant plugin install vagrant-guest-ansible ; vagrant plugin install vagrant-libvirt ; wget -O /etc/yum.repos.d/virtualbox.repo wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo ; yum install -y VirtualBox-6.0 && systemctl start packagekit
 ```
 ##### Also, install the Virtualbox extension pack below
 - [Virtual Box Extension Pack](https://www.virtualbox.org/wiki/Downloads)
 
 ## Debian
-- Install Ruby/Bundler/Git - `sudo snap install ruby ; sudo apt install ruby-bundler git -y`
-- Vagrant - `wget -c https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.deb ; sudo dpkg -i vagrant_2.2.5_x86_64.deb`
-    - Vagrant Plugin - `vagrant plugin install vagrant-guest-ansible`
-- Virtualbox `wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add - ; wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add - ; sudo add-apt-repository "deb http://download.virtualbox.org/virtualbox/debian bionic contrib"; sudo apt update; sudo apt install -y virtualbox-6.0`
-    - [Virtual Box Extension Pack](https://www.virtualbox.org/wiki/Downloads)
+_NOTE - If it's been awhile since you've run apt update, do that first. Reboot if the kernel was updated._
+
+##### Install all at once by Copy/Pasting the below command into your terminal as root.
+```
+sudo snap install ruby ; sudo apt install ruby-bundler git -y; wget -c https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.deb ; sudo dpkg -i vagrant_2.2.5_x86_64.deb && vagrant plugin install vagrant-guest-ansible; wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add - ; wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add - ; sudo add-apt-repository "deb http://download.virtualbox.org/virtualbox/debian bionic contrib"; sudo apt update; sudo apt install -y virtualbox-6.0
+```
+##### Also, install the Virtualbox extension pack below
+- [Virtual Box Extension Pack](https://www.virtualbox.org/wiki/Downloads)
 
 ##### Once the above software is installed. Do the following if you're running the environment on Mac/Linux:
 1. Create a separate `~/bin` directory and `cd` to it.  (The directory doesn't have to be ~/bin, it can be anything you want.)
@@ -47,9 +50,9 @@ systemctl stop packagekit; yum install -y epel-release && yum install -y git bin
 3. Once downloaded, unzip the file and move it to the directory you created earlier, `~/bin` in the above example.
 3. Open CMD prompt as Administrator and cd to the `~/bin/ipasetup7` directory then run `vagrant up` to deploy the environment
 
-_Now the deployment should be up and running!_
-
 **Also, don't be spooked by any scary red font during the setup process. There are known issues that won't have a negative affect on the environment.**
+
+_Now the deployment should be up and running!_
 
 ## (Optional) Install Github Desktop to make pulling down changes easier
 _NOTE this requires a free Github account_

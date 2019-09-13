@@ -36,11 +36,6 @@
       path: /etc/hosts
       line: 192.168.55.4 repo.example.com repo
       create: yes
-  - name: Packages Installed.
-    yum:
-      name:
-        - ipa-server
-        - ipa-server-dns
   - name: Configuring network
     shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.5/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search example.com ipv4.method manual
   - name: Enabling services
